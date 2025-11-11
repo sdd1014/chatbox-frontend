@@ -62,7 +62,9 @@ const ChatBox = () => {
   };
 
   const handleSendMessage = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     if (!inputMessage.trim() || isLoading) return;
 
     const userMessage = inputMessage.trim();
@@ -125,6 +127,14 @@ const ChatBox = () => {
     }
   };
 
+  // 处理键盘事件：Enter 发送，Shift+Enter 换行
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -175,13 +185,14 @@ const ChatBox = () => {
         <div ref={messagesEndRef} />
       </div>
       <form className="chat-input-form" onSubmit={handleSendMessage}>
-        <input
-          type="text"
+        <textarea
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="输入消息..."
+          onKeyDown={handleKeyDown}
+          placeholder="输入消息... (Enter 发送, Shift+Enter 换行)"
           className="chat-input"
           disabled={isLoading}
+          rows={1}
         />
         <button type="submit" className="send-button" disabled={isLoading || !inputMessage.trim()}>
           {isLoading ? '发送中...' : '发送'}
