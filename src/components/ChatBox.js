@@ -3,12 +3,19 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './ChatBox.css';
+import aiAvatar from './ai-avatar.jpg';
 
 // GraphQL API 端点 - 部署后需要替换为你的 Workers URL
 const GRAPHQL_ENDPOINT = process.env.REACT_APP_GRAPHQL_URL || 'http://localhost:8787/graphql';
 
 const ChatBox = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      text: '嗨！我是你的人工智能助手。有什么问题都可以问我。',
+      sender: 'assistant',
+      id: Date.now(),
+    },
+  ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -153,33 +160,47 @@ const ChatBox = () => {
               message.isError ? 'error-message' : ''
             } ${message.isLoading ? 'loading-message' : ''}`}
           >
-            {message.sender === 'assistant' && !message.isLoading ? (
-              <ReactMarkdown
-                components={{
-                  code({ node, inline, className, children, ...props }) {
-                    const match = /language-(\w+)/.exec(className || '');
-                    return !inline && match ? (
-                      <SyntaxHighlighter
-                        style={vscDarkPlus}
-                        language={match[1]}
-                        PreTag="div"
-                        {...props}
-                      >
-                        {String(children).replace(/\n$/, '')}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    );
-                  },
-                }}
-              >
-                {message.text}
-              </ReactMarkdown>
-            ) : (
-              message.text
-            )}
+            <div
+              className="message-avatar"
+              style={message.sender === 'assistant' ? {
+                backgroundImage: `url(${aiAvatar})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                color: 'transparent',
+                fontSize: 0
+              } : {}}
+            >
+              {message.sender === 'user' ? '👤' : 'AI'}
+            </div>
+            <div className="message-content">
+              {message.sender === 'assistant' && !message.isLoading ? (
+                <ReactMarkdown
+                  components={{
+                    code({ node, inline, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || '');
+                      return !inline && match ? (
+                        <SyntaxHighlighter
+                          style={vscDarkPlus}
+                          language={match[1]}
+                          PreTag="div"
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                >
+                  {message.text}
+                </ReactMarkdown>
+              ) : (
+                message.text
+              )}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />

@@ -3,31 +3,24 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1f35 0%, #2a3149 100%);
+  background:
+    radial-gradient(circle at 20% 50%, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(138, 98, 229, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0e1a 0%, #1a1f35 50%, #0f1420 100%);
   position: relative;
   overflow: hidden;
 }
 
 .App::before {
-  content: '';
+  content: 'AI';
   position: absolute;
-  width: 200%;
-  height: 200%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(43, 88, 118, 0.1) 0px,
-    rgba(43, 88, 118, 0.1) 2px,
-    transparent 2px,
-    transparent 12px
-  );
-  animation: bg-scroll 20s linear infinite;
-}
-
-@keyframes bg-scroll {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 400px;
+  font-weight: 900;
+  color: rgba(74, 144, 226, 0.03);
+  z-index: 0;
+  letter-spacing: -20px;
+  font-family: 'Arial Black', sans-serif;
 }
