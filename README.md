@@ -1,70 +1,211 @@
-# Getting Started with Create React App
+# ChatBox - AI 聊天机器人前端
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+基于 React 的 AI 聊天机器人前端应用，部署在 Cloudflare Pages。
 
-## Available Scripts
+## 功能特性
 
-In the project directory, you can run:
+- ✅ 现代化聊天界面（深色主题）
+- ✅ Markdown 消息渲染
+- ✅ 代码高亮显示
+- ✅ 实时消息加载状态
+- ✅ 错误处理
+- ✅ 自动滚动到最新消息
+- ✅ GraphQL API 集成
+- ✅ 响应式设计
 
-### `npm start`
+## 技术栈
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **框架**: React 19.2.0
+- **样式**: 自定义 CSS（玻璃态效果 + 渐变）
+- **Markdown**: react-markdown
+- **代码高亮**: react-syntax-highlighter
+- **部署**: Cloudflare Pages
+- **CI/CD**: GitHub Actions
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 项目结构
 
-### `npm test`
+```
+chatbox-frontend/
+├── src/
+│   ├── components/
+│   │   ├── ChatBox.js       # 主聊天组件
+│   │   └── ChatBox.css      # 聊天界面样式
+│   ├── App.js               # 根组件
+│   ├── App.css
+│   └── index.js
+├── public/
+│   └── _redirects           # Cloudflare Pages 路由配置
+├── .github/workflows/
+│   └── deploy.yml           # CI/CD 配置
+└── package.json
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 快速开始
 
-### `npm run build`
+### 1. 克隆仓库
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/YOUR_USERNAME/chatbox-frontend.git
+cd chatbox-frontend
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 2. 安装依赖
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm install
+```
 
-### `npm run eject`
+### 3. 配置环境变量
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+创建 `.env.local` 文件：
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```env
+REACT_APP_GRAPHQL_URL=https://chatbox-workers.YOUR_ACCOUNT.workers.dev/graphql
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**重要**: 替换为你的实际 Workers GraphQL 端点 URL！
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 4. 本地开发
 
-## Learn More
+```bash
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+访问 http://localhost:3000
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 5. 构建
 
-### Code Splitting
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 部署到 Cloudflare Pages
 
-### Analyzing the Bundle Size
+### 方式一：通过 Cloudflare Dashboard（推荐）
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **登录 Cloudflare Dashboard**
+   - 访问 https://dash.cloudflare.com/
+   - 进入 "Workers & Pages"
 
-### Making a Progressive Web App
+2. **创建 Pages 项目**
+   - 点击 "Create application" → "Pages"
+   - 选择 "Connect to Git"
+   - 授权并选择此仓库
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+3. **配置构建设置**
+   ```
+   Project name: chatbox-frontend
+   Production branch: main
+   Build command: npm run build
+   Build output directory: build
+   Root directory: /
+   ```
 
-### Advanced Configuration
+4. **添加环境变量**
+   - Settings → Environment variables
+   - 添加：`REACT_APP_GRAPHQL_URL`
+   - 值：你的 Workers GraphQL 端点
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+5. **配置自定义域名**
+   - Custom domains → Set up a custom domain
+   - 输入：`shidd.site`
 
-### Deployment
+### 方式二：通过 GitHub Actions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+仓库已配置好 GitHub Actions，只需：
 
-### `npm run build` fails to minify
+1. 在 GitHub 仓库 Settings → Secrets 中添加：
+   - `CLOUDFLARE_API_TOKEN`
+   - `CLOUDFLARE_ACCOUNT_ID`
+   - `REACT_APP_GRAPHQL_URL`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+2. 推送代码到 main 分支：
+   ```bash
+   git push origin main
+   ```
+
+## 环境变量
+
+| 变量名 | 说明 | 示例 |
+|--------|------|------|
+| `REACT_APP_GRAPHQL_URL` | Workers GraphQL API 端点 | `https://chatbox-workers.xxx.workers.dev/graphql` |
+
+## 界面设计
+
+- 深色主题设计
+- 玻璃态效果（Glassmorphism）
+- 渐变色彩
+- 平滑动画效果
+
+## 功能说明
+
+### 消息发送
+1. 用户输入消息
+2. 显示"正在思考..."加载状态
+3. 调用 GraphQL API
+4. 渲染 AI 响应（支持 Markdown）
+
+### Markdown 支持
+- 文本格式（粗体、斜体等）
+- 代码块（带语法高亮）
+- 列表
+- 引用
+- 链接
+
+### 错误处理
+- 网络错误提示
+- API 错误提示
+- 可点击关闭的错误横幅
+
+## 相关项目
+
+- **后端仓库**: https://github.com/YOUR_USERNAME/chatbox-workers
+- **在线演示**: https://shidd.site
+
+## 本地开发注意事项
+
+确保后端 Workers 已部署并运行，或者在本地运行：
+
+```bash
+# 在后端仓库目录
+cd ../chatbox-workers
+npm run dev
+```
+
+然后在前端 `.env.local` 中使用本地端点：
+```
+REACT_APP_GRAPHQL_URL=http://localhost:8787/graphql
+```
+
+## 故障排除
+
+### 问题 1: 无法连接到后端
+
+检查环境变量 `REACT_APP_GRAPHQL_URL` 是否正确配置。
+
+### 问题 2: CORS 错误
+
+确保后端 Workers 已正确配置 CORS，允许你的前端域名。
+
+### 问题 3: 构建失败
+
+```bash
+# 清理缓存
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+## 更新部署
+
+直接推送代码，CI/CD 会自动部署：
+
+```bash
+git add .
+git commit -m "Update frontend"
+git push origin main
+```
+
+## License
+
+MIT
